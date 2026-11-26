@@ -6,7 +6,9 @@ Entry for make.fun bounty "Funniest Lost Sock Status Update"
 
 The sealed gate requires /output/entry.txt to be UTF-8 text of 1 to 120
 characters, not only whitespace, a single line. This program writes the
-line, then reads the file back and verifies the exact bytes.
+line, then reads the file back and verifies the exact bytes — including
+that no trailing newline sneaked in, since the gate counts every
+character in the file.
 """
 
 import os
@@ -44,8 +46,10 @@ def main() -> None:
     assert written == LINE, (
         f"read-back mismatch: wrote {LINE!r}, read {written!r}"
     )
+    assert not written.endswith("\n"), "entry must not end with a newline"
     assert 1 <= len(written) <= MAX_CHARS
     print(f"Wrote {len(written)} chars to {out_path}")
+    print(written)
 
 
 if __name__ == "__main__":
